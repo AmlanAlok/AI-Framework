@@ -245,10 +245,10 @@ class WebCrawler:
         print_node(root_node)
         return file_names
 
-    def create_java_class_files(self, file_names):
+    def create_java_class_files(self, file_names, output_directory):
 
         # Directory to save the Java class files
-        output_directory = "test_java_classes_demo3"
+        # output_directory = "default_folder_name"
 
         # Ensure the output directory exists
         if not os.path.exists(output_directory):
@@ -264,9 +264,9 @@ class WebCrawler:
 
         print(f"Java class files created in the '{output_directory}' directory.")
 
-    def generate_java_files(self):
+    def generate_java_files(self, output_directory="default_output_directory"):
         file_names = self.get_file_names()
-        self.create_java_class_files(file_names)
+        self.create_java_class_files(file_names, output_directory)
         pass
 
 
@@ -296,6 +296,7 @@ def main():
     parser.add_argument("--login-url", type=str, help="Login URL")
     parser.add_argument("-u", "--username", type=str, help="Username for login")
     parser.add_argument("-p", "--password", type=str, help="Password for login")
+    parser.add_argument("-f", "--output-directory", type=str, help="Directory name where java classes are created")
 
     args = parser.parse_args()
 
@@ -326,7 +327,10 @@ def main():
         if args.generate_java:
             print("Generating Java class files...")
             # Add logic to generate Java class files here
-            crawler.generate_java_files()
+            if args.output_directory:
+                crawler.generate_java_files(args.output_directory)
+            else:
+                crawler.generate_java_files()
 
 '''
 # Future scope of work
@@ -359,7 +363,8 @@ if __name__ == "__main__":
     main()
 
 '''
-python3 ./web-crawler/poc-2/qualibar_crawler.py --get-sitemap
-python3 ./web-crawler/poc-2/qualibar_crawler.py --get-sitemap --domain-url https://qaits.qualibar.com -login --login-url https://qaits.qualibar.com/login -u test@yopmail.com -p test --generate-java
-python3 ./web-crawler/poc-2/qualibar_crawler.py --get-sitemap --domain-url https://848mitchell.com --generate-java
+python3 ./qualibar_crawler.py --get-sitemap --domain-url https://qaits.qualibar.com -login --login-url https://qaits.qualibar.com/login -u test@yopmail.com -p test --generate-java --output-directory QaitsQualibar
+python3 ./qualibar_crawler.py --get-sitemap --domain-url https://848mitchell.com --generate-java --output-directory Housing
+python3 ./qualibar_crawler.py --get-sitemap --domain-url https://qualibar.com --generate-java --output-directory Qualibar
+python3 ./qualibar_crawler.py --get-sitemap --domain-url https://letshavana.com --generate-java --output-directory Havana
 '''
