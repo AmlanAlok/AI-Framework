@@ -101,8 +101,6 @@ class WebCrawler:
             ".mkv",
         }
         self.url_to_node = {self.base_url: Node(self.base_url)}
-        options = webdriver.ChromeOptions()
-        self.driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
 
 
     def normalize_url(self, url):
@@ -138,22 +136,22 @@ class WebCrawler:
         # options = webdriver.ChromeOptions()
         options = webdriver.ChromeOptions()
         # Run in headless mode
-        # options.add_argument("--headless")
-        self.driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
+        options.add_argument("--headless")
+        driver = webdriver.Chrome(options=options, service=Service(ChromeDriverManager().install()))
 
         try:
             # Open the login page
-            self.driver.get(self.login_url)
+            driver.get(self.login_url)
             # Find the username and password fields and enter the credentials
             # driver.find_element(By.ID, "email").send_keys(self.username)
-            self.driver.find_element(By.ID, "username").send_keys(self.username)
-            self.driver.find_element(By.ID, "password").send_keys(self.password)
+            driver.find_element(By.ID, "username").send_keys(self.username)
+            driver.find_element(By.ID, "password").send_keys(self.password)
             # Submit the login form
-            self.driver.find_element(By.ID, "password").send_keys(Keys.RETURN)
+            driver.find_element(By.ID, "password").send_keys(Keys.RETURN)
             # Wait for the login to complete and redirect
             time.sleep(5)
             # Get cookies from the Selenium session
-            cookies = self.driver.get_cookies()
+            cookies = driver.get_cookies()
             for cookie in cookies:
                 self.session.cookies.set(cookie["name"], cookie["value"])
 
@@ -165,10 +163,11 @@ class WebCrawler:
             print("Logged in successfully")
 
             time.sleep(10)
-            mono = self.driver.page_source
+            mono = driver.page_source
             soup3 = BeautifulSoup(mono, "lxml")
             all = soup3.find_all('a')
             pass
+            print('Here')
 
         except Exception as e:
             print(f"Failed to log in: {e}")
